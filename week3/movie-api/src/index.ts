@@ -10,7 +10,8 @@ import { userRouter } from './routers/user-router';
 const app = express();
 
 // set the port
-const port = 3000 || process.env.PORT; // will use port from computers environment variables or 3000 if there is none
+const port = process.env.PORT || 3000; // will use port from computers environment variables or 3000 if there is none
+console.log(process.env.PORT)
 app.set('port', port);
 
 const sess = {
@@ -56,6 +57,31 @@ app.use((req, resp, next) => {
  ********************************************************************************************/
 app.use('/movies', movieRouter);
 app.use('/users', userRouter);
+
+
+/*********************************************************************************************
+ * Test Endpoints that don't need the db
+ ********************************************************************************************/
+app.get('/test', (req, res) => {
+  res.end();
+})
+
+app.get('/test1', (req, res) => {
+  res.sendStatus(203);
+})
+
+app.post('/test2', (req, res) => {
+  res.status(201);
+  res.json({
+    id: 1
+  });
+})
+
+app.get('/test/:id', (req, res) => {
+  res.json({
+    id: req.params.id
+  });
+})
 
 const server = app.listen(port, () => {
   console.log(`App is running at http://localhost:${app.get('port')} in ${app.get('env')} mode`);
