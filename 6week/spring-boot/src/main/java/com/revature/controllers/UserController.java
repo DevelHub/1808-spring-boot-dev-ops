@@ -1,6 +1,5 @@
 package com.revature.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.dto.Credential;
 import com.revature.model.AppUser;
 import com.revature.services.UserService;
 
@@ -33,7 +33,8 @@ public class UserController {
 	// /users/:id
 	@GetMapping("{id}")
 	public AppUser findById(@PathVariable int id) {
-		return new AppUser(id, "blake", "pass", "admin", new ArrayList<>());
+		AppUser user = us.findOne(id);
+		return user;
 	}
 
 	@PostMapping
@@ -41,6 +42,17 @@ public class UserController {
 		u.setId(1);
 		ResponseEntity<AppUser> re = new ResponseEntity<AppUser>(u, HttpStatus.CREATED);
 		return re;
+	}
+
+	@PostMapping("login")
+	public AppUser login(@RequestBody Credential u) {
+
+		return us.login(u.getUsername(), u.getPassword());
+	}
+	
+	@GetMapping("movies/{id}")
+	public List<AppUser> usersThatLikeMovieWithId(@PathVariable int id) {
+		return us.findByMoviesId(id);
 	}
 
 }
