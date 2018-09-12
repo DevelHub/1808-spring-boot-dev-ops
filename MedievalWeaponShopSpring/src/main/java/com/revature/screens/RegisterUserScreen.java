@@ -2,6 +2,9 @@ package com.revature.screens;
 
 import java.util.Scanner;
 
+import javax.annotation.Resource;
+import javax.inject.Qualifier;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +15,7 @@ import com.revature.daos.UserDao;
 public class RegisterUserScreen implements Screen {
 	private Scanner scan = new Scanner(System.in);
 
-	@Autowired
+	@Resource(name="user dao jdbc")
 	private UserDao ud;
 	
 	@Autowired

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.revature.beans.User;
 import com.revature.util.ConnectionUtil;
 
-@Repository
+@Repository("user dao jdbc")
 public class UserDaoJdbc implements UserDao {
 	@Autowired
 	private ConnectionUtil cu;

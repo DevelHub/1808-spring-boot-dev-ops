@@ -9,9 +9,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import com.revature.beans.User;
 
+@Component("user serializer")
 public class UserSerializer implements UserDao {
 	private Logger log = Logger.getRootLogger();
 	public static final UserSerializer us = new UserSerializer();

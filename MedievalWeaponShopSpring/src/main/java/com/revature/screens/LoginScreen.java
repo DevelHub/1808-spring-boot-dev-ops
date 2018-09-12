@@ -2,6 +2,8 @@ package com.revature.screens;
 
 import java.util.Scanner;
 
+import javax.annotation.Resource;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,7 +18,7 @@ public class LoginScreen implements Screen {
 	@Autowired
 	private AppState state;
 	private Scanner scan = new Scanner(System.in);
-	@Autowired
+	@Resource(name="user dao jdbc")
 	private UserDao ud;
 	private Logger log = Logger.getRootLogger();
 	
