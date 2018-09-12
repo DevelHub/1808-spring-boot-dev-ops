@@ -20,7 +20,7 @@ pipeline {
     stage('Download') {
       steps {
         // Download code from a GitHub repository
-        git branch: 'master', url: 'https://github.com/1808-java-blake/demos.git'
+        git branch: 'master', url: 'https://github.com/btkruppa/1808-spring-boot-dev-ops.git'
       }
     }
 
