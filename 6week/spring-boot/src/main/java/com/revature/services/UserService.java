@@ -4,8 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.model.AppUser;
+import com.revature.projections.BasicUserProjection;
 import com.revature.repos.UserRepo;
 
 @Service
@@ -14,15 +17,17 @@ public class UserService {
 	@Autowired
 	private UserRepo ur;
 
-	public List<AppUser> findAll() {
-		return ur.findAll();
+	public List<BasicUserProjection> findAll() {
+		return ur.findAllProjectedBy();
 	}
 
+	@Transactional(propagation = Propagation.MANDATORY)
 	public AppUser findOne(int id) {
-		return ur.findById(id).get();
+		AppUser u = ur.getOne(id);
+		return u;
 	}
-	
-	public AppUser login(String username, String password) {
+
+	public BasicUserProjection login(String username, String password) {
 		return ur.findByUsernameAndPassword(username, password);
 	}
 

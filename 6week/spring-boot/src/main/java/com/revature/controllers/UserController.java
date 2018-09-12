@@ -2,6 +2,8 @@ package com.revature.controllers;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.dto.Credential;
 import com.revature.model.AppUser;
+import com.revature.projections.BasicUserProjection;
 import com.revature.services.UserService;
 
 @RestController
@@ -25,15 +28,17 @@ public class UserController {
 
 	// /users
 	@GetMapping
-	public List<AppUser> findAll() {
+	public List<BasicUserProjection> findAll() {
 		System.out.println("finding all users");
 		return us.findAll();
 	}
 
 	// /users/:id
+	@Transactional
 	@GetMapping("{id}")
 	public AppUser findById(@PathVariable int id) {
 		AppUser user = us.findOne(id);
+		user.setRole("Admin!!!");
 		return user;
 	}
 
@@ -45,11 +50,11 @@ public class UserController {
 	}
 
 	@PostMapping("login")
-	public AppUser login(@RequestBody Credential u) {
+	public BasicUserProjection login(@RequestBody Credential u) {
 
 		return us.login(u.getUsername(), u.getPassword());
 	}
-	
+
 	@GetMapping("movies/{id}")
 	public List<AppUser> usersThatLikeMovieWithId(@PathVariable int id) {
 		return us.findByMoviesId(id);

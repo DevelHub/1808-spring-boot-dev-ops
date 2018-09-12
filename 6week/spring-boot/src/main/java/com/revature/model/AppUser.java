@@ -11,14 +11,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 @Table(name = "app_users")
 public class AppUser {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
@@ -27,22 +28,26 @@ public class AppUser {
 	private String password;
 	private String role;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "users_movies", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
 	private List<Movie> movies;
+
+	@OneToMany(mappedBy = "owner", fetch=FetchType.EAGER)
+	private List<Account> accounts;
 
 	public AppUser() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public AppUser(int id, String username, String password, String role, List<Movie> movies) {
+	public AppUser(int id, String username, String password, String role, List<Movie> movies, List<Account> accounts) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.role = role;
 		this.movies = movies;
+		this.accounts = accounts;
 	}
 
 	public int getId() {
@@ -85,10 +90,19 @@ public class AppUser {
 		this.movies = movies;
 	}
 
+	public List<Account> getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(List<Account> accounts) {
+		this.accounts = accounts;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((accounts == null) ? 0 : accounts.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((movies == null) ? 0 : movies.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
@@ -106,6 +120,11 @@ public class AppUser {
 		if (getClass() != obj.getClass())
 			return false;
 		AppUser other = (AppUser) obj;
+		if (accounts == null) {
+			if (other.accounts != null)
+				return false;
+		} else if (!accounts.equals(other.accounts))
+			return false;
 		if (id != other.id)
 			return false;
 		if (movies == null) {
@@ -134,7 +153,7 @@ public class AppUser {
 	@Override
 	public String toString() {
 		return "AppUser [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role
-				+ ", movies=" + movies + "]";
+				+ ", movies=" + movies + ", accounts=" + accounts + "]";
 	}
 
 }
